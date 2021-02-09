@@ -70,3 +70,27 @@ var connection = mysql.createConnection({
             }
         })
   }
+  function viewDep() {
+      var query = connection.query("SELECT * FROM department", function(err, res) {
+          if (err) throw err;
+          console.table(res);
+          runSearch();
+      });
+    //   console.log(query.sql);
+  }
+
+  function viewRole() {
+    var query = connection.query("SELECT * FROM role", function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        runSearch();
+    });
+  }
+
+  function viewEmployee() {
+    var query = connection.query("SELECT * FROM employee", function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        runSearch();
+    });
+  }
