@@ -94,3 +94,20 @@ var connection = mysql.createConnection({
         runSearch();
     });
   }
+
+  function addDep() {
+      inquirer
+        .prompt({
+            name: "title",
+            type: "input",
+            message: "What is the name of the department you would like to add?"
+
+        })
+        .then(function(answer) {
+            var query = connection.query("INSERT INTO department (name) VALUES (?)", answer.title, function(err, res) {
+                if(err) throw err;
+                // console.log(res);
+                viewDep();
+            } )
+        })
+  }
