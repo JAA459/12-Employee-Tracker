@@ -88,7 +88,8 @@ var connection = mysql.createConnection({
   }
 
   function viewEmployee() {
-    var query = connection.query("SELECT * FROM employee", function(err, res) {
+      var query = connection.query("SELECT role_id, first_name, last_name, title, salary, name FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id",
+     function(err, res) {
         if (err) throw err;
         console.table(res);
         runSearch();
@@ -111,3 +112,64 @@ var connection = mysql.createConnection({
             } )
         })
   }
+
+  function addRole () {
+    inquirer
+      .prompt([{
+          name: "title",
+          type: "input",
+          message: "What is the name of the Role you would like to add?"
+
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "Please enter the salary amount for this role"
+      },
+      {
+          name: "id",
+          type: "input",
+          message: "Please enter the department id number"
+      }
+    ])
+      .then(function(answer) {
+          var query = connection.query("INSERT INTO role (title, salary, department_id) VALUES (?,?,?)", [answer.title, answer.salary, answer.id], function(err, res) {
+              if(err) throw err;
+              // console.log(res);
+              viewRole();
+          } )
+      })
+}
+
+function addEmployee() {
+    inquirer
+      .prompt([{
+          name: "first",
+          type: "input",
+          message: "What is the first name of the employee you would like to add?"
+
+      },
+      {
+        name: "last",
+        type: "input",
+        message: "what is the last name of the employee you would like to add?"
+      },
+      {
+          name: "role",
+          type: "input",
+          message: "Please enter the role id number for this employee"
+      },
+      {
+        name: "manager",
+        type: "input",
+        message: "Please enter the managers id who will be managing this employee."
+    }
+    ])
+      .then(function(answer) {
+          var query = connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)", [answer.first, answer.last, answer.role, answer.manager], function(err, res) {
+              if(err) throw err;
+              // console.log(res);
+              viewEmployee();
+          } )
+      })
+}
