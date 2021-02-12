@@ -80,7 +80,10 @@ var connection = mysql.createConnection({
   }
 
   function viewRole() {
-    var query = connection.query("SELECT * FROM role", function(err, res) {
+    var query = connection.query(`SELECT title, salary, name
+    FROM role
+    INNER JOIN department
+    ON role.department_id = department.id`, function(err, res) {
         if (err) throw err;
         console.table(res);
         runSearch();
@@ -88,7 +91,12 @@ var connection = mysql.createConnection({
   }
 
   function viewEmployee() {
-      var query = connection.query("SELECT role_id, first_name, last_name, title, salary, name FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id",
+      var query = connection.query(`SELECT employee.first_name, employee.last_name, employee.role_id, title, salary, name
+      FROM employee
+      INNER JOIN role
+      ON employee.role_id = role.id
+      INNER JOIN department
+      ON role.department_id = department.id`,
      function(err, res) {
         if (err) throw err;
         console.table(res);
@@ -167,6 +175,30 @@ function addEmployee() {
     ])
       .then(function(answer) {
           var query = connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)", [answer.first, answer.last, answer.role, answer.manager], function(err, res) {
+              if(err) throw err;
+              // console.log(res);
+              viewEmployee();
+          } )
+      })
+}
+
+function updateEmployeeRoles() {
+    inquirer
+      .prompt([{
+          name: "eId",
+          type: "input",
+          message: "What is the ID of the Employee you would like to update"
+
+      },
+      {
+        name: "roleId",
+        type: "input",
+        message: "what is there new role ID?"
+      },
+    ])
+      .then(function(answer) {
+          var query = connection.query("UPDATE employee SET role_id = ? WHERE id = ?",
+           [answer.roleId, answer.eId], function(err, res) {
               if(err) throw err;
               // console.log(res);
               viewEmployee();

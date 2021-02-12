@@ -28,50 +28,59 @@ CREATE TABLE employee (
 );
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Joshua", "Arroyo", 59, 520);
+VALUES ("Joshua", "Arroyo", 1, null);
 
 INSERT INTO role (title, salary, department_id)
-VALUES ("CEO", 100000, 42);
+VALUES ("CEO", 100000, 1);
 
 INSERT INTO department (name)
 VALUES ("Executive Officers");
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Nick", "Bosa", 62, 343);
+VALUES ("Nick", "Bosa", 2, null);
 
 INSERT INTO role (title, salary, department_id)
-VALUES ("CFO", 100000, 29);
+VALUES ("CFO", 100000, 2);
 
 INSERT INTO department (name)
 VALUES ("Enginerring");
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Joey", "Lee", 23, 619);
+VALUES ("Joey", "Lee", 3, 2);
 
 INSERT INTO role (title, salary, department_id)
-VALUES ("Sales Assistant", 125000, 23);
+VALUES ("Sales Assistant", 125000, 3);
 
 INSERT INTO department (name)
 VALUES ("Sales");
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Tom", "Smith", 68, 960);
+VALUES ("Tom", "Smith", 4, 2);
 
 INSERT INTO role (title, salary, department_id)
-VALUES ("Senior Developer", 250000, 35);
+VALUES ("Senior Developer", 250000, 4);
 
 INSERT INTO department (name)
 VALUES ("Developers");
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Jerry", "Rice", 60, 960);
+VALUES ("Jerry", "Rice", 5, 1);
 
 INSERT INTO role (title, salary, department_id)
-VALUES ("General Manager", 325681, 49);
+VALUES ("General Manager", 325681, 5);
 
 INSERT INTO department (name)
 VALUES ("Management");
+
+SELECT employee.first_name, employee.last_name, title, salary, name, E.first_name, E.last_name
+FROM employee
+INNER JOIN role
+ON employee.role_id = role.id
+INNER JOIN department
+ON role.department_id = department.id
+INNER JOIN employee E
+ON employee.manager_id = E.id
