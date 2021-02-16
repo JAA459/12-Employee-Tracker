@@ -91,12 +91,14 @@ var connection = mysql.createConnection({
   }
 
   function viewEmployee() {
-      var query = connection.query(`SELECT employee.first_name, employee.last_name, employee.role_id, title, salary, name
+      var query = connection.query(`SELECT employee.first_name "First Name", employee.last_name as "Last Name", title, salary, name, E.last_name as manager
       FROM employee
       INNER JOIN role
       ON employee.role_id = role.id
       INNER JOIN department
-      ON role.department_id = department.id`,
+      ON role.department_id = department.id
+      INNER JOIN employee E
+      ON employee.manager_id = E.id`,
      function(err, res) {
         if (err) throw err;
         console.table(res);
